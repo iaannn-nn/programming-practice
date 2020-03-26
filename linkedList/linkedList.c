@@ -49,7 +49,7 @@ void LinkTest(){
 	struct node* head = BuildOneTwoThree();
 	struct node* newNode = NULL;
 
-	newNode = malloc(sizeof(struct node);
+	newNode = malloc(sizeof(struct node));
 	newNode->data = 1;
 	newNode->next = head;
 	head = newNode;
@@ -58,7 +58,7 @@ void LinkTest(){
 void Push(struct node** headRef, int newData){
 	struct node* newNode = malloc(sizeof(struct node));
 
-	newNode->data = data;
+	newNode->data = newData;
 	newNode->next = *headRef;
 	*headRef = newNode;
 }
@@ -149,5 +149,7 @@ struct node* BuildWithDummyNode(){
 }
 
 int main(){
-
+	struct node* head = BuildWithDummyNode();
+	int len = Length3(head);
+	printf("%d\n", len );
 }
