@@ -147,9 +147,158 @@ struct node* BuildWithDummyNode(){
 	}
 	return (dummy.next);
 }
+struct node* BuildWithLocalRef(){
+	struct node* head = NULL;
+	struct node** lastPtrRef = &head;
+
+	int i = 0;
+	for(i =1; i< 6; i++){
+		Push(lastPtrRef, i);
+		lastPtrRef = &((*lastPtrRef)->next);
+	}
+	return (head);
+} 
+
+void AppendNode(struct node** headRef, int num){
+	struct node* current = *headRef;
+	
+	struct node* newNode = malloc(sizeof(struct node));
+	newNode->data = num;
+	newNode->next = NULL;
+
+	if(current == NULL){
+		*headRef = newNode;
+	}else{
+		while(current->next != NULL){
+			current= current->next;
+		}
+
+		current->next = newNode;
+	}
+}
+
+void  AppendNodeWithPush(struct node** headRef, int num){
+	struct node* current = *headRef;
+
+	if(current == NULL){
+		Push(headRef,num);
+	}else{
+		while(current->next!=NULL){
+			current = current->next;
+		}
+		//grab the last pointer 
+		//point it to new node
+		Push(&(current->next),num);
+	}
+}
+
+void printList(struct node* head){
+	struct node* current = head;
+	while(current != NULL){
+		printf("%d\n",current-> data);
+		current = current->next;
+	}
+}
+
+struct node* CopyList(struct node* head){
+	struct node* current = head;
+	struct node* newList = NULL;
+	struct node* tail = NULL;
+
+	while(current != NULL){
+		if(newList == NULL){
+			newList = malloc(sizeof(struct node));
+			newList->data = current->data;
+			newList->next = NULL;
+			tail = newList;
+		} else {
+			tail->next = malloc(sizeof(struct node));
+			tail = tail->next;
+			tail->data = current->data;
+			tail->next = NULL;
+		}
+		current = current->next;
+	}
+	return(newList);
+}
+
+//Method 1
+struct node* CopyList2(struct node* head){
+	struct node* current = head;
+	struct node* newList = NULL;
+
+	struct node** newNode = &newList;
+
+	while(current!= NULL){
+		Push(newNode, current->data);
+		newNode = &((*newNode)->next);
+		current = current->next;
+	}
+
+	return (newList);
+}
+
+//Method2
+struct node* CopyList3(struct node* head){
+	struct node* current = head;
+	struct node* newList = NULL;
+	struct node* tail = NULL;
+
+	while(current != NULL){
+		if(newList == NULL){
+			Push(&newList,current->data);
+			tail = newList;
+		}else{
+			Push(&(tail->next), current->data);
+			tail= tail->next;
+		}
+		current = current->next;
+	}
+
+	return (newList);
+}
+
+//Method3 with Dummy Node;
+struct node* CopyList4(struct node * head){
+	struct node* current = head;
+
+	struct node dummy;
+	dummy.next = NULL;
+
+	struct node* tail = &dummy;
+
+	while(current != NULL){
+		Push(&(tail->next), current->data);
+		tail = tail->next;
+		current = current->next;
+	}
+
+	return (dummy.next);
+}
+
+//Method4 with recursion:
+struct node* CopyList5(struct node* head){
+	if(head == NULL) return NULL;
+	else{
+		struct node* newList = malloc(sizeof(struct node));
+		newList->data = head->data;
+		newList->next = CopyList(head->next);
+
+		return(newList);
+	}
+}
+
+void CopyListTest(){
+	struct node* head = BuildWithDummyNode();
+	AppendNodeWithPush(&head,10);
+	//AppendNode(&head, 10);
+	//struct node* head2 = CopyList2(head);
+	//struct node* head2 = CopyList4(head);
+	struct node* head2 = CopyList5(head);
+	printList(head);
+	printList(head2);
+}
 
 int main(){
-	struct node* head = BuildWithDummyNode();
-	int len = Length3(head);
-	printf("%d\n", len );
+	
 }
