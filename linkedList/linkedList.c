@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<assert.h>
+
 
 struct node{
 	int data;
@@ -77,21 +79,22 @@ void PushTest2(){
 	Push(&head, 2);
 	Push(&head, 3);
 }
-// void BasicsCaller(){
-// 	struct node* head;
-// 	int len;
 
-// 	head = BuildOneTwoThree(); //Start with {1,2,3}
-	
-// 	Push(&head,13); 
-// 	//Push 13 on thr front, yieding{13,1,2,3}
-// 	// (the '&' is because head is passed as a reference pointer)
-	
-// 	Push(&(head->next),42);
-// 	//{13,42,1,2,3}
+void BasicsCaller(){
+	struct node* head;
+	int len;
 
-// 	len = Length(head);
-// 	}
+	head = BuildOneTwoThree(); //Start with {1,2,3}
+	
+	Push(&head,13); 
+	//Push 13 on thr front, yieding{13,1,2,3}
+	// (the '&' is because head is passed as a reference pointer)
+	
+	Push(&(head->next),42);
+	//{13,42,1,2,3}
+
+	len = Length(head);
+	}
 
 //Change the passed in head pointer to NULL
 void ChangeToNull(struct node** headRef){
@@ -299,6 +302,111 @@ void CopyListTest(){
 	printList(head2);
 }
 
-int main(){
+
+int Count(struct node* head, int searchFor){
+	int count = 0;
+	while(head != NULL){
+		if(head->data == searchFor){
+			count++;
+		}
+		head = head->next;
+	}
+	return count;
+}
+
+int Count2(struct node* head, int searchFor){
+	struct node* current;
+	int count = 0;
+	for(current = head; current!= NULL; current = current->next){
+		if(current->data == searchFor) count++;
+	}
+}
+
+void CountTest(){
+	struct node* myList = BuildOneTwoThree();
+	int count = Count(myList, 2);
+	printf("%d", count);
+}
+
+int GetNth(struct node* head, int index){
+	int count = 0;
+
+	while(head != NULL){
+		if(count == index) return (head->data);
+		count++;
+		head = head->next;
+	}
+
+	assert(0);
+}
+
+void GetNthTest(){
+	struct node* myList= BuildOneTwoThree();
+	int lastNode = GetNth(myList, -1);
+	printf("%d\n",lastNode);
+}
+
+void DeleteList(struct node** headRef){
+	struct node* current = *headRef;
+
+	while(current != NULL){
+		struct node* oldNode = current;
+		current = current->next;
+		free(oldNode);
+	}
+
+	*headRef = NULL;
+}
+
+void DeleteList2(struct node** headRef){
+	struct node* current = *headRef;
+	struct node* next;
+
+	while(current != NULL){
+		next = current->next;
+		free(current);
+		current = next;
+	}
+
+	*headRef = NULL;
+}
+
+void DeleteListTest(){
+	struct node* myList = BuildOneTwoThree();
+
+	DeleteList2(&myList);
+	printf("%s",*myList);
+}
+
+int Pop(struct node** headRef){
+	assert(*headRef != NULL);
 	
+	struct node* head = *headRef;
+	*headRef = head->next;
+
+	int data = head->data;
+	free(head);
+	return data;
+}
+
+int Pop2(struct node** headRef){
+	struct node* head;
+	int result;
+
+	head = *headRef;
+	assert(head != NULL);
+
+	result = head->data;
+	*headRef = head->next;
+
+	free(head);
+	return(result);
+}
+
+
+int main(){
+	struct node* head = NULL;
+	int a = Pop(&head);
+	int len = Length(head);
+	printf("%d\n",len);
 }
