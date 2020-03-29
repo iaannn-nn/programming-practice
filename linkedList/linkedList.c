@@ -375,7 +375,7 @@ void DeleteListTest(){
 	struct node* myList = BuildOneTwoThree();
 
 	DeleteList2(&myList);
-	printf("%s",*myList);
+	//printf("%s",*myList);
 }
 
 int Pop(struct node** headRef){
@@ -403,10 +403,52 @@ int Pop2(struct node** headRef){
 	return(result);
 }
 
+void InsertNth(struct node** headRef, int index, int data){
+	assert(**headRef != NULL);
+	assert(index => 0);
+
+	struct node* current = *headRef;
+
+	if(current == NULL || index == 0){
+		Push(headRef, data);
+	}else{
+		int count = 0;
+		while(current->next != NULL){
+			if(count <= index -1){
+				Push(&(current->next),data);
+				break;
+			}
+			current = current->next;
+		}
+		if(current->next == NULL){
+			Push(&(current->next),data);
+		}
+	}
+}
+
+
+void InsertNth2(struct node** headRef, int index, int data){
+	if(index == 0){
+		Push(headRef, data);
+	} else{
+		struct node* current = *headRef;
+		int i;
+
+		for(int i=0; i< index-1; i++){
+			assert(current != NULL);
+			current = current->next;
+		}
+		assert(current != NULL);
+		Push(&(current->next),data);
+	}
+}
+
 
 int main(){
 	struct node* head = NULL;
-	int a = Pop(&head);
-	int len = Length(head);
-	printf("%d\n",len);
+	InsertNth(&head, 0, 13);
+	InsertNth(&head, 1, 42);
+	InsertNth(&head, 1, 5);
+
+	printList(head);
 }
