@@ -47,6 +47,18 @@ struct node* BuildOneTwoThree(){
 	return head;
 }
 
+struct node* BuildOneThreeFive(){
+	struct node* head = (struct node*) malloc(sizeof(struct node));
+	head->data = 1;
+	head->next = (struct node*) malloc(sizeof(struct node));
+	head->next->data =3;
+	head->next->next =(struct node*) malloc(sizeof(struct node));
+	head->next->next->data = 5;
+	head->next->next->next = NULL;
+
+	return head;
+}
+
 void LinkTest(){
 	struct node* head = BuildOneTwoThree();
 	struct node* newNode = NULL;
@@ -404,14 +416,12 @@ int Pop2(struct node** headRef){
 }
 
 void InsertNth(struct node** headRef, int index, int data){
-	assert(**headRef != NULL);
-	assert(index => 0);
 
 	struct node* current = *headRef;
 
 	if(current == NULL || index == 0){
 		Push(headRef, data);
-	}else{
+	}else {
 		int count = 0;
 		while(current->next != NULL){
 			if(count <= index -1){
@@ -443,12 +453,29 @@ void InsertNth2(struct node** headRef, int index, int data){
 	}
 }
 
+void SortedInsert(struct node** headRef, struct node* newNode){
+	if( *headRef == NULL || newNode->data < (*headRef)->data ){
+		newNode->next = *headRef;
+		*headRef = newNode;
+	}else{
+		struct node* current = *headRef;
+		struct node* prev = NULL;
+
+		while(current != NULL && newNode->data > current->data){
+			prev = current;
+			current = current->next;
+		}
+		prev->next = newNode;
+		newNode->next = current;
+	}
+}
+
 
 int main(){
 	struct node* head = NULL;
-	InsertNth(&head, 0, 13);
-	InsertNth(&head, 1, 42);
-	InsertNth(&head, 1, 5);
-
+	head = BuildOneThreeFive();
+	struct node* node0 = malloc(sizeof(struct node));
+	node0->data = 6;
+	SortedInsert(&head, node0);
 	printList(head);
 }
