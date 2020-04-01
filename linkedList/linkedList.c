@@ -59,6 +59,21 @@ struct node* BuildOneThreeFive(){
 	return head;
 }
 
+
+struct node* BuildFiveThreeTwoOne(){
+	struct node* head = (struct node*) malloc(sizeof(struct node));
+	head->data = 5;
+	head->next = (struct node*) malloc(sizeof(struct node));
+	head->next->data =3;
+	head->next->next =(struct node*) malloc(sizeof(struct node));
+	head->next->next->data = 2;
+	head->next->next->next = (struct node*)malloc(sizeof(struct node));
+	head->next->next->next->data = 1;
+	head->next->next->next->next = NULL;
+
+	return head;
+}
+
 void LinkTest(){
 	struct node* head = BuildOneTwoThree();
 	struct node* newNode = NULL;
@@ -470,12 +485,78 @@ void SortedInsert(struct node** headRef, struct node* newNode){
 	}
 }
 
+void SortedInsert2(struct node** headRef, struct node* newNode){
+	struct node dummy;
+	dummy.next = *headRef;
 
-int main(){
+	struct node* current = &dummy;
+	struct node* next = current->next;
+
+	while(next!= NULL && next->data < newNode-> data){
+		current = next;
+		next = next-> next;
+	}
+	current-> next = newNode;
+	newNode-> next = next;
+	*headRef = dummy.next;
+}
+
+void SortedInsert3(struct node** headRef, struct node* newNode){
+	struct node** currentRef = headRef;
+	
+	while(*currentRef!= NULL && (*current->Ref)->data < newNode->data){
+		currentRef = &((*currentRef)->next);
+	}
+
+	newNode->next = *currentRef;
+	*currentRef = newNode;
+}
+
+void SortedInsertTest(){
 	struct node* head = NULL;
 	head = BuildOneThreeFive();
 	struct node* node0 = malloc(sizeof(struct node));
-	node0->data = 6;
-	SortedInsert(&head, node0);
+	//node0->data = 0;
+	//node0->data = 2;
+	//node0->data = 6;
+	SortedInsert2(&head, node0);
 	printList(head);
+}
+
+void InsertSort(struct node** headRef){
+	struct node *result = NULL;
+	struct node* next;
+
+	while(*headRef != NULL){
+		next = (*headRef)->next;
+		SortedInsert2(&result, *headRef);
+		*headRef = next;
+	}
+
+	*headRef = result;
+}
+
+void InsertSort2(struct node** headRef){
+	struct node* result = NULL;
+	struct node* current = *headRef;
+	struct node* next;
+
+	while(current!= NULL){
+		next = current->next;
+		SortedInsert(&result,current);
+		current = next;
+	}
+
+	*headRef = result;
+}
+
+void InsertSortTest(){
+	struct node* head = NULL;
+	head = BuildFiveThreeTwoOne();
+	InsertSort(&head);
+	printList(head);
+}
+
+int main(){
+		
 }
