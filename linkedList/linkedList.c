@@ -504,7 +504,7 @@ void SortedInsert2(struct node** headRef, struct node* newNode){
 void SortedInsert3(struct node** headRef, struct node* newNode){
 	struct node** currentRef = headRef;
 	
-	while(*currentRef!= NULL && (*current->Ref)->data < newNode->data){
+	while(*currentRef!= NULL && (*currentRef)->data < newNode->data){
 		currentRef = &((*currentRef)->next);
 	}
 
@@ -557,6 +557,87 @@ void InsertSortTest(){
 	printList(head);
 }
 
+void Append(struct node** aRef, struct node** bRef){
+	if( *bRef != NULL){
+		if(*aRef == NULL){
+			*aRef = *bRef;
+			*bRef = NULL;
+		}else{
+			struct node* curr = *aRef;
+			while(curr->next!= NULL){
+				curr= curr->next;
+			}
+			curr->next = *bRef;
+			*bRef = NULL;
+		}
+	}
+}
+
+struct node* BuildList(int n){
+	struct node* head = NULL;
+	struct node * tail;
+
+	int i;
+	Push(&head, 0);
+	tail = head;
+
+	for(i = 1; i< n; i++){
+		Push(&(tail->next),i);
+		tail = tail->next;
+	}
+
+	return(head);
+}
+
+void FrontBackSplitforOdd(struct node* source,
+		struct node** frontRef, struct node** backRef){
+	
+	struct node* fast = source;
+	struct node* slow = source;
+
+	while(fast != NULL){
+		fast = fast->next;
+		if(fast!= NULL){
+			fast = fast->next;
+			slow = slow->next;
+		}
+	}
+	*frontRef = source;
+	*backRef = slow->next;
+	slow->next = NULL;
+}
+
+
+void FrontBackSplit(struct node* source,
+		struct node** frontRef, struct node** backRef){
+	
+	struct node* fast = source;
+	struct node* slow = source;
+
+	while(fast != NULL){
+		fast = fast->next;
+		if(fast!= NULL){
+			fast = fast->next;
+			if(fast!= NULL){
+			slow = slow->next;
+			}
+		}
+	}
+	*frontRef = source;
+	*backRef = slow->next;
+	slow->next = NULL;
+}
+
+void FrontBackSplitTest(){
+	struct node* front = NULL;
+	struct node* back = NULL;
+	struct node* source = BuildList(7);
+	FrontBackSplit(source, &front,&back);
+	printList(front);
+	printf("%s\n","hello");
+	printList(back);
+}
+
 int main(){
-		
+
 }
