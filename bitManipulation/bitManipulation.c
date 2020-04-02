@@ -62,17 +62,44 @@ void printBits(int num){
 	unsigned int checkBit = 1 << sizeof(num) * 8 -1;
 
 	while(checkBit != 0){
-		unsigned int result = num & checkBit;
+		int result = num & checkBit;
 		if(result == checkBit){
 			printf("%d",1);
 		}else{
 			printf("%d", 0);
 		}
-		checkBit = checkBit>>1;
+		checkBit = checkBit >> 1;
 	}
 }
 
-int main(){
+int  CountOneBits(int num){
+	unsigned int checkBit = 1 << sizeof(num) * 8 -1;
+
+	int count = 0; 
+	while(checkBit != 0){
+		int result = num & checkBit;
+		if(result == checkBit){
+			count = count + 1;
+		}
+		checkBit = checkBit >> 1;
+	}
+	return count;
+}
+
+int count_1s_optimised(int num){
+	int count = 0;
+	while(num != 0){
+		num = num & (num-1);
+		count++;
+	}
+	return count;
+}
+
+void CountOneBitsTest(){
 	int x = 65;
-	printBits(65);
+	printf("%d",count_1s_optimised(65));
+}
+
+int main(){
+	CountOneBitsTest();
 }
